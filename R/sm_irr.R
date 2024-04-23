@@ -357,7 +357,7 @@ sm_irr_ui <- function(id, imports = NULL, ...) {
       in",
       a(
         "Erosheva, Martinkova, & Lee (2021)",
-        href = "http://doi.org/10.1111/rssa.12681",
+        href = "https://doi.org/10.1111/rssa.12681",
         target = "_blank", .noWS = "after"
       ), ". We use their AIBS grant proposal peer-review dataset for presentation."
     ),
@@ -478,12 +478,12 @@ sm_irr_ui <- function(id, imports = NULL, ...) {
       "ShinyItemAnalysis Modules are developed by the ",
       a(
         "Computational Psychometrics Group",
-        href = "http://www.cs.cas.cz/comps/",
+        href = "https://www.cs.cas.cz/comps/",
         target = "_blank", .noWS = "after"
       ), " supported by the Czech Science Foundation under Grant Number ",
       a(
         "21-03658S",
-        href = "http://www.cs.cas.cz/comps/projectTheorFoundComPs.html",
+        href = "https://www.cs.cas.cz/comps/projectTheorFoundComPs.html",
         target = "_blank", .noWS = "after"
       ), " awarded to Patricia Martinkova. Elena Erosheva and Carole Lee's
     contributions to the development of this module and

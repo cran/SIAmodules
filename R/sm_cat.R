@@ -1,4 +1,3 @@
-
 # Module documentation ----------------------------------------------------
 
 # This is the user-facing documentation.
@@ -53,12 +52,13 @@ NULL
 #' @importFrom forcats fct_inorder
 #' @importFrom dplyr mutate filter pull
 #' @importFrom tibble tibble
-#' @importFrom purrr set_names map_dfc
+#' @importFrom purrr set_names map_dfc map_int
 #' @importFrom tidyr pivot_longer
 #' @importFrom mirt extract.item extract.mirt iteminfo
 #' @importFrom stats qnorm
 #' @importFrom plotly ggplotly renderPlotly
 #' @importFrom glue glue
+#' @importFrom utils packageVersion
 #'
 sm_cat_server <- function(id, imports = NULL, ...) {
   moduleServer(id, function(input, output, session) {
@@ -66,14 +66,21 @@ sm_cat_server <- function(id, imports = NULL, ...) {
 
     # on module initialization, update choices in IRT model selectInput
     observe({
-      # if there are imports passed on to our module (i.e. it runs inside SIA app),
+      # check if the module is run inside SIA app,
+      # SIA >= 1.5.0 provides more detailed info that we cannot check on SIA 1.5.0
+      if (packageVersion("ShinyItemAnalysis") > "1.5.0") {
+        runs_from_sia <- !is.null(imports) && !is.null(attr(imports, "imported_by_sia")) && attr(imports, "imported_by_sia")
+      } else {
+        runs_from_sia <- !is.null(imports)
+      }
 
-      if (!is.null(imports)) {
+
+      if (runs_from_sia) {
         # list these specified IRT models that comes from the app
         irt_models <- c(
           "Module's example 2PL" = "example",
-          "Selected IRT for binary data" = "sia_binary",
-          "Selected Nominal Response Model" = "sia_nrm"
+          "SIA-fitted IRT for binary data" = "sia_binary",
+          "SIA-fitted NRM" = "sia_nrm"
         )
 
         # and pass it as the choices to be displayed in the UI
@@ -89,10 +96,13 @@ sm_cat_server <- function(id, imports = NULL, ...) {
         sia_binary = imports$IRT_binary_model(),
         # object for NRM option consist of fitted model and some additional information
         # that we have no use for in this module
-        sia_nrm = imports$IRT_bock_fit_and_orig_levels()[["fit"]],
+        sia_nrm = {
+          fit <- imports$IRT_bock_fit_and_orig_levels()[["fit"]]
+          attr(fit, "orig_levels") <- imports$IRT_bock_fit_and_orig_levels()[["orig_levels"]]
+          fit
+        },
       )
     })
-
 
 
     item_infos <- reactive({
@@ -177,7 +187,14 @@ sm_cat_server <- function(id, imports = NULL, ...) {
         filter(.data$item_pos <= input$item_pos)
 
       filtered_data %>%
-        ggplot(aes(.data$item, group = 1)) +
+        ggplot(aes(.data$item,
+          group = 1,
+          text = glue(
+            "<b>Item: {.data$item}</b>
+            Theta: {round(.data$theta, 2L)}
+            95% CI [{round(.data$lci, 2L)}, {round(.data$uci, 2L)}]"
+          )
+        )) +
         geom_segment(aes(y = cur_theta(), yend = cur_theta(), x = 0.85, xend = input$item_pos + 1L), linetype = "dashed", col = "gray50") +
         geom_hline(aes(yintercept = input$true_theta), linetype = "solid", col = "gray80", alpha = .5, size = 1) +
         geom_ribbon(aes(y = .data$theta, ymin = .data$lci, ymax = .data$uci), alpha = .15, fill = "gray75", data = bkg_data) +
@@ -188,18 +205,9 @@ sm_cat_server <- function(id, imports = NULL, ...) {
         geom_point(aes(y = .data$theta), col = blue, size = 2) +
         scale_x_discrete(expand = expansion(mult = c(.01, .01))) +
         scale_y_continuous(limits = range(info_thetas), expand = expansion(mult = c(.01, .01))) +
-        labs(y = "ability estimate") +
+        labs(x = "Item", y = "Ability estimate") +
         theme_minimal()
     })
-
-
-    # TODO: in the right plot, rename cur_theta to "ability estimate (\hat{theta})"
-    # TODO: in the left plot, rename theta to "ability (\theta)"
-    # such detailed tweaks are not possible in plotly
-    # (only limited support using mathjax is provided, we would have to rewrite plotly to coop with KaTeX
-    # + use iframes?? and preload MJ before plot rendering)
-    # -- by and large, shiny is really not suitable for such a complex design,
-    # even with caching, its barely usable, this usage of plotly is not well suported
 
 
     # get the ability estimate based on which current item was chosen (IIC of the item with max. info at that theta)
@@ -225,11 +233,9 @@ sm_cat_server <- function(id, imports = NULL, ...) {
       # this likely wouldn't have been an issue
       req(!is.na(next_item))
 
-
       already_admin <- sim_res() %>%
         filter(.data$item_pos <= input$item_pos) %>%
         pull(.data$item)
-
 
       bkg_data <- item_infos()
 
@@ -242,7 +248,14 @@ sm_cat_server <- function(id, imports = NULL, ...) {
         filter(.data$item == next_item)
 
       filtered_data %>%
-        ggplot(aes(.data$theta, .data$info, group = .data$item)) +
+        ggplot(aes(.data$theta, .data$info,
+          group = .data$item,
+          text = glue(
+            "<b>Item: {.data$item}</b>
+            Information: {round(.data$info, 2L)}
+            Theta: {round(.data$theta, 2L)}"
+          )
+        )) +
         geom_vline(aes(xintercept = input$true_theta), linetype = "solid", col = "gray80", alpha = .5, size = 1) +
         geom_line(aes(col = .data$item %in% already_admin), show.legend = FALSE, alpha = .7, data = bkg_data) +
         {
@@ -255,16 +268,27 @@ sm_cat_server <- function(id, imports = NULL, ...) {
         scale_color_manual(values = c(`TRUE` = "#2C7BB6", `FALSE` = "gray80")) +
         scale_y_reverse() +
         coord_flip() +
-        labs(x = "ability") +
+        labs(x = "Ability", y = "Information") +
         theme_minimal()
     })
 
 
     scored_resps <- reactive({
       sr <- sim_res_raw()$scored_responses
+      ans_items <- sim_res_raw()$items_answered
 
-      sr <- ifelse(sr, "correct", "incorrect")
+      if (input$irt_model == "sia_nrm") {
+        # score items according to the key SIA NRM
+        orig_levels <- attr(mod(), "orig_levels")
+        corr_ans <- orig_levels %>% map_int(~ which(attr(.x, "key")))
 
+        # reorder according to the answered items
+        corr_ans <- corr_ans[ans_items]
+      } else {
+        corr_ans <- rep(1L, length(sr))
+      }
+
+      sr <- ifelse(sr == corr_ans, "correct", "incorrect")
       c(sr, "end of the test")
     })
 
@@ -280,7 +304,7 @@ sm_cat_server <- function(id, imports = NULL, ...) {
       )
 
       infos_plt() %>%
-        ggplotly() %>%
+        ggplotly(tooltip = "text") %>%
         plotly::add_annotations(
           text = text, showarrow = F, xref = "paper", yref = "paper",
           x = .02, y = 1, align = "left", xanchor = "left", yanchor = "top"
@@ -289,7 +313,7 @@ sm_cat_server <- function(id, imports = NULL, ...) {
 
 
     estimates_plt_plotly <- reactive({
-      estimates_plt() %>% ggplotly()
+      estimates_plt() %>% ggplotly(tooltip = "text")
     })
 
     merged_plots <- reactive({
@@ -405,5 +429,44 @@ sm_cat_ui <- function(id, imports = NULL, ...) {
       )
     ),
     plotlyOutput(ns("merged"), height = "550px"),
+
+    # sample R code -----------------------------------------------------------
+
+    h4("Selected R code"),
+    pre(includeText(system.file("sc/cat.R", package = "SIAmodules")), class = "mb-4 language-r"),
+
+    # references --------------------------------------------------------
+
+    h4("References"),
+    p(
+      "\u0160t\u011bp\u00e1nek, L., Martinkov\u00e1, P. (2020). Feasibility of computerized adaptive testing evaluated by Monte-Carlo and post-hoc simulations. In ",
+      tags$i("Proceedings of the 2020 Federated Conference on Computer Science and Information Systems (FedCSIS),"),
+      " pp. 359\\u2013367, ",
+      tags$a(
+        "doi:10.15439/2020F197",
+        href = "https://doi.org/10.15439/2020F197",
+        target = "_blank"
+      )
+    ),
+
+    # acknowledgements --------------------------------------------------------
+
+    h4("Acknowledgements"),
+    p(
+      "ShinyItemAnalysis Modules are developed by the",
+      a(
+        "Computational Psychometrics Group",
+        href = "https://www.cs.cas.cz/comps/",
+        target = "_blank"
+      ),
+      "supported by the Czech Science Foundation under Grant Number",
+      a(
+        "21-03658S",
+        href = "https://www.cs.cas.cz/comps/projectTheorFoundComPs.html",
+        target = "_blank",
+        .noWS = "after"
+      ),
+      "."
+    )
   )
 }

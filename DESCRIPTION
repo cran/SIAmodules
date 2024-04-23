@@ -1,8 +1,8 @@
 Type: Package
 Package: SIAmodules
 Title: Modules for 'ShinyItemAnalysis'
-Version: 0.1.0
-Date: 2023-03-27
+Version: 0.1.1
+Date: 2024-04-23
 Authors@R: 
     c(person(given = "Patricia",
              family = "Martinkova",
@@ -19,19 +19,20 @@ Description: Package including additional modules for interactive
     educational tests, psychological assessments, health-related and other
     types of multi-item measurements, or ratings from multiple raters.
 License: GPL-3
-URL: http://www.ShinyItemAnalysis.org
+URL: https://www.ShinyItemAnalysis.org
 Depends: R (>= 3.5.0)
 Imports: cli, difNLR, dplyr, DT, forcats, ggplot2, glue, lme4,
         magrittr, mirt, mirtCAT, plotly, purrr, rlang, scales, shiny,
-        ShinyItemAnalysis, shinyjs, stringr, tibble, tidyr, yaml
+        ShinyItemAnalysis (>= 1.5.0), shinyjs, stringr, tibble, tidyr,
+        yaml
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Config/ShinyItemAnalysis/module: true
 NeedsCompilation: no
-Packaged: 2023-03-28 20:42:04 UTC; Martinkova
+Packaged: 2024-04-23 09:28:47 UTC; martinkova
 Author: Patricia Martinkova [aut, cre]
     (<https://orcid.org/0000-0003-4754-8543>),
   Jan Netik [aut] (<https://orcid.org/0000-0002-3888-3203>)
 Maintainer: Patricia Martinkova <martinkova@cs.cas.cz>
 Repository: CRAN
-Date/Publication: 2023-03-29 08:00:05 UTC
+Date/Publication: 2024-04-23 09:50:02 UTC

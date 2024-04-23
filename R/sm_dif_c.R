@@ -930,7 +930,7 @@ sm_dif_c_ui <- function(id, imports = NULL, ...) {
         Learning to Learn data, as more closesly described in ",
       a(
         "Martinkov\u00e1, Hladk\u00e1, and Potu\u017en\u00edkov\u00e1 (2020)",
-        href = "http://doi.org/10.1016/j.learninstruc.2019.101286",
+        href = "https://doi.org/10.1016/j.learninstruc.2019.101286",
         target = "_blank",
         .noWS = "after"
       ),
@@ -941,7 +941,7 @@ sm_dif_c_ui <- function(id, imports = NULL, ...) {
         regression models in the ", code("difNLR"), " package ",
       a(
         "(Hladk\u00e1 & Martinkov\u00e1, 2020)",
-        href = "http://doi.org/10.32614/RJ-2020-014",
+        href = "https://doi.org/10.32614/RJ-2020-014",
         target = "_blank",
         .noWS = "after"
       ),
@@ -1265,7 +1265,7 @@ sm_dif_c_ui <- function(id, imports = NULL, ...) {
               label = "Item",
               min = 1,
               value = 1,
-              max = 10,
+              max = 41,
               step = 1,
               animate = animationOptions(interval = 1600)
             )
@@ -1353,13 +1353,13 @@ sm_dif_c_ui <- function(id, imports = NULL, ...) {
       "ShinyItemAnalysis Modules are developed by the",
       a(
         "Computational Psychometrics Group",
-        href = "http://www.cs.cas.cz/comps/",
+        href = "https://www.cs.cas.cz/comps/",
         target = "_blank"
       ),
       "supported by the Czech Science Foundation under Grant Number",
       a(
         "21-03658S",
-        href = "http://www.cs.cas.cz/comps/projectTheorFoundComPs.html",
+        href = "https://www.cs.cas.cz/comps/projectTheorFoundComPs.html",
         target = "_blank",
         .noWS = "after"
       ),

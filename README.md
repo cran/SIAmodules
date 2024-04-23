@@ -35,7 +35,7 @@ additional interactive presentations of selected psychometric topics:
 
 All modules are installed online at [Czech Academy of Sciences
 server](https://shiny.cs.cas.cz/ShinyItemAnalysis/). Visit our [**web
-page**](http://www.shinyitemanalysis.org/) about `ShinyItemAnalysis` to
+page**](https://www.shinyitemanalysis.org/) about `ShinyItemAnalysis` to
 learn more!
 
 ## Usage
@@ -66,7 +66,8 @@ appreciate if you include a reference in your publications. To cite the
 software, please, use:
 
 > Martinková P., & Hladká A. (2023) Computational Aspects of
-> Psychometric Methods: With R. Chapman and Hall/CRC.
+> Psychometric Methods: With R. Chapman and Hall/CRC. [doi:
+> 10.1201/9781003054313](https://doi.org/10.1201/9781003054313).
 
 and/or:
 
