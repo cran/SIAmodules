@@ -9,6 +9,7 @@
 status](https://www.r-pkg.org/badges/version/SIAmodules)](https://CRAN.R-project.org/package=SIAmodules)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+
 <!-- badges: end -->
 
 ## Overview
@@ -27,15 +28,18 @@ additional interactive presentations of selected psychometric topics:
 <div class="figure" style="text-align: center; margin-top: 40px;">
 
 <img src="man/figures/cat.png" width="75%"/>
+
 <p class="caption">
+
 “Computerized Adaptive Tests” module in the ShinyItemAnalysis app
+
 </p>
 
 </div>
 
 All modules are installed online at [Czech Academy of Sciences
 server](https://shiny.cs.cas.cz/ShinyItemAnalysis/). Visit our [**web
-page**](https://www.shinyitemanalysis.org/) about `ShinyItemAnalysis` to
+page**](http://www.shinyitemanalysis.org/) about `ShinyItemAnalysis` to
 learn more!
 
 ## Usage
@@ -47,8 +51,7 @@ install.packages("SIAmodules")
 ```
 
 Then, to use the aforementioned modules, run `ShinyItemAnalysis`
-interactive application in `R`. **Note that version \>= 1.5.0 is
-required!**
+interactive application in `R`.
 
 ``` r
 ShinyItemAnalysis::run_app()

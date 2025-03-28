@@ -441,7 +441,7 @@ sm_cat_ui <- function(id, imports = NULL, ...) {
     p(
       "\u0160t\u011bp\u00e1nek, L., Martinkov\u00e1, P. (2020). Feasibility of computerized adaptive testing evaluated by Monte-Carlo and post-hoc simulations. In ",
       tags$i("Proceedings of the 2020 Federated Conference on Computer Science and Information Systems (FedCSIS),"),
-      " pp. 359\\u2013367, ",
+      " pp. 359\u2013367, ",
       tags$a(
         "doi:10.15439/2020F197",
         href = "https://doi.org/10.15439/2020F197",
@@ -453,13 +453,7 @@ sm_cat_ui <- function(id, imports = NULL, ...) {
 
     h4("Acknowledgements"),
     p(
-      "ShinyItemAnalysis Modules are developed by the",
-      a(
-        "Computational Psychometrics Group",
-        href = "https://www.cs.cas.cz/comps/",
-        target = "_blank"
-      ),
-      "supported by the Czech Science Foundation under Grant Number",
+      "This ShinyItemAnalysis Module was developed with support by the Czech Science Foundation under Grant Number",
       a(
         "21-03658S",
         href = "https://www.cs.cas.cz/comps/projectTheorFoundComPs.html",

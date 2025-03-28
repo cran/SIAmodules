@@ -465,22 +465,12 @@ sm_irr_ui <- function(id, imports = NULL, ...) {
               <a href = "https://doi.org/10.1111/rssa.12681", target = "_blank">doi:10.1111/rssa.12681</a>
               </li>
 
-              <li>Martinkova, P., & Drabinova, A. (2018).
-              ShinyItemAnalysis for teaching psychometrics and to enforce routine analysis of educational tests.
-              The R Journal, 10(2), 503-515.
-              <a href = "https://doi.org/10.32614/RJ-2018-074", target = "_blank">doi:10.32614/RJ-2018-074</a>
-              </li>
             </ul>'),
 
     # acknowledgements -------------------------------------------------------------
     h4("Acknowledgements"),
     p(
-      "ShinyItemAnalysis Modules are developed by the ",
-      a(
-        "Computational Psychometrics Group",
-        href = "https://www.cs.cas.cz/comps/",
-        target = "_blank", .noWS = "after"
-      ), " supported by the Czech Science Foundation under Grant Number ",
+      "This ShinyItemAnalysis Module was developed with support by the Czech Science Foundation under Grant Number ",
       a(
         "21-03658S",
         href = "https://www.cs.cas.cz/comps/projectTheorFoundComPs.html",
